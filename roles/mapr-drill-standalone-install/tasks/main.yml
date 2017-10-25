@@ -40,6 +40,11 @@
     regexp="^export DRILLBIT_JAVA_OPTS"
     insertafter="^\# export DRILLBIT_JAVA_OPTS"
   when: drill_security == 'pam'
+- name: Fix the Java version detection bug in drill-config.sh
+  lineinfile: path={{ drill_path_result.files[0].path }}/bin//drill-config.sh
+              regexp='^"$JAVA" -version 2>&1 | grep "version" | egrep -e "1.4|1.5|1.6" > /dev/null'
+              line='"$JAVA" -version 2>&1 | grep "version" | egrep -e "1\.4|1\.5|1\.6" > /dev/null'
+              state=present
 
 # http://maprdocs.mapr.com/home/Drill/hive_impersonation_step_1.html
 - name: Set DRILL_JAVA_OPTS for MapR-SASL 1
